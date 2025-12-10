@@ -53,6 +53,8 @@ resource "aws_instance" "nexus-repository" {
   # security_groups = [aws_security_group.nexus-repository-sg.name]
   vpc_security_group_ids = [aws_security_group.nexus-repository-sg.id]
 
+  key_name = aws_key_pair.nexus-repository-ssh-key.key_name
+
   tags = {
     Name = "nexus-repository"
     Env = var.env
@@ -62,4 +64,19 @@ resource "aws_instance" "nexus-repository" {
 resource "aws_eip_association" "nexus-eip-assoc" {
   instance_id   = aws_instance.nexus-repository.id
   allocation_id = aws_eip.nexus-repository-eip.id
+}
+
+resource "tls_private_key" "nexus-repository-ssh-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "nexus-repository-ssh-key" {
+  key_name   = "nexus-repository-ssh-key"
+  public_key = tls_private_key.nexus-repository-ssh-key.public_key_openssh
+}
+
+output "private_key_pem" {
+  value     = tls_private_key.nexus-repository-ssh-key.private_key_pem
+  sensitive = true
 }
