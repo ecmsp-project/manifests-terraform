@@ -1,0 +1,5 @@
+az1                  = "eu-central-1a"
+az2                  = "eu-central-1b"
+vpc_cidr             = "10.0.0.0/16"
+public_subnet1_cidr  = "10.0.0.0/24"
+private_subnet1_cidr = "10.0.1.0/24"
