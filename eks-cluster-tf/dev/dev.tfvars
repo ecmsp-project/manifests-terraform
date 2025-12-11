@@ -1,0 +1,5 @@
+region = "eu-central-1"
+bucket = "ecmsp-ecr-eks-terraform-state"
+profile = "terraform-admin"
+eks_cluster_name = "eks-dev-ecmsp"
+env = "dev"

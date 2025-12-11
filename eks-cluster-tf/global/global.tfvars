@@ -1,5 +1,5 @@
 region = "eu-central-1"
-bucket = "ecmsp-nexus-repository-terraform-state"
+bucket = "ecmsp-ecr-eks-terraform-state"
 profile = "terraform-admin"
 github_repositories = [
     "ecmsp-project/user-service",
