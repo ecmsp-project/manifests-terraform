@@ -32,8 +32,9 @@ resource "aws_iam_role" "nodes" {
 
 locals {
   policies = [
-    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPullOnly",
-    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodeMinimalPolicy",
+    "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+    "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+    "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
   ]
 }
 
@@ -58,7 +59,7 @@ resource "aws_eks_node_group" "general" {
 
   scaling_config {
     desired_size = var.general_nodes_count
-    max_size     = 2
+    max_size     = 3
     min_size     = 1
   }
 

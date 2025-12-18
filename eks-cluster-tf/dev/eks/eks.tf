@@ -15,20 +15,8 @@ resource "aws_iam_role" "eks" {
   })
 }
 
-locals {
-  policies = [
-    "arn:aws:iam::aws:policy/AmazonEKSBlockStoragePolicy",
-    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
-    "arn:aws:iam::aws:policy/AmazonEKSComputePolicy",
-    "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy",
-    "arn:aws:iam::aws:policy/AmazonEKSNetworkingPolicy",
-  ]
-}
-
 resource "aws_iam_role_policy_attachment" "eks" {
-  for_each = toset(local.policies)
-
-  policy_arn = each.value
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks.name
 }
 
@@ -50,4 +38,19 @@ resource "aws_eks_cluster" "eks" {
   }
 
   depends_on = [aws_iam_role_policy_attachment.eks]
+}
+
+resource "aws_eks_access_entry" "root_account" {
+  cluster_name      = aws_eks_cluster.eks.name
+  principal_arn     = "arn:aws:iam::529236942244:root"
+  type              = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "root_account_admin" {
+  cluster_name       = aws_eks_cluster.eks.name
+  policy_arn         = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn      = "arn:aws:iam::529236942244:root"
+  access_scope {
+    type = "cluster"
+  }
 }
