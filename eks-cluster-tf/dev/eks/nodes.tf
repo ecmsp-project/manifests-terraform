@@ -51,7 +51,6 @@ resource "aws_eks_node_group" "general" {
   node_group_name = "general"
   node_role_arn   = aws_iam_role.nodes.arn
 
-  # Run all nodes within the same availability zone to avoid data transfer charges.
   subnet_ids = [data.terraform_remote_state.vpc.outputs.private_subnet_ids[0]]
 
   capacity_type  = "ON_DEMAND"
